@@ -12,4 +12,5 @@ public class TagManager : MonoBehaviour {
     public const string spikes = "Spikes";
     public const string spawnPoint = "SpawnPoint";
     public const string fallingFloor = "FallingFloor";
+    public const string floor = "Floor";
 }
