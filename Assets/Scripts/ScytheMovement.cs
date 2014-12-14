@@ -27,10 +27,10 @@ public class ScytheMovement : MonoBehaviour {
 	    }
 	} else {
 	    direction.x = right.position.x - transform.position.x;
-	    if (transform.position.x >= right.position.x) {
-		moveLeft_ = true;
-	    }
-	}
+            if (transform.position.x >= right.position.x) {
+                moveLeft_ = true;
+            }
+        }
 	direction.Normalize();
 	return direction * speed;
     }

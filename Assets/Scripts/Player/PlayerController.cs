@@ -33,19 +33,19 @@ public class PlayerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-	switch (other.tag) {
-	    case TagManager.spikes:
-		dieBySpikes();
-		break;
-	    case TagManager.spawnPoint:
-		activateSpawnPoint(other.transform.position);
-		break;
-	    case TagManager.scythe:
-		dieByScythe();
-		break;
-	    default:
-		break;
-	}
+        switch (other.tag) {
+            case TagManager.spikes:
+                dieBySpikes();
+                break;
+            case TagManager.spawnPoint:
+                activateSpawnPoint(other.transform.position);
+                break;
+            case TagManager.scythe:
+                dieByScythe();
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>
@@ -54,12 +54,12 @@ public class PlayerController : MonoBehaviour {
     private Vector3 updateMoveDirection()
     {
         float h = Input.GetAxis("Horizontal");
-	Vector3 moveDirection = (Vector3.right * h).normalized;
-	moveDirection.x  *= speed;
-	if (Input.GetButton("Jump")) {
-	    moveDirection.y = jumpSpeed;
-	}
-	return moveDirection;
+        Vector3 moveDirection = (Vector3.right * h).normalized;
+        moveDirection.x  *= speed;
+        if (Input.GetButton("Jump")) {
+            moveDirection.y = jumpSpeed;
+        }
+        return moveDirection;
     }
 
     /// <summary>
@@ -67,13 +67,13 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private void dieBySpikes()
     {
-	Debug.Log("died by spikes");
-	transform.position = activeSpawnPoint_;
+        Debug.Log("died by spikes");
+        transform.position = activeSpawnPoint_;
     }
 
     private void dieByScythe()
     {
-	Debug.Log("died by scythe");
+        Debug.Log("died by scythe");
     }
     
     /// <summary>

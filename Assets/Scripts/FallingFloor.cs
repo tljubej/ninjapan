@@ -5,13 +5,13 @@ public class FallingFloor : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-	switch (other.tag) {
-	    case TagManager.player:
-		fallDown();
-		break;
-	    default:
-		break;
-	}
+        switch (other.tag) {
+            case TagManager.player:
+                fallDown();
+                break;
+            default:
+                break;
+        }
     }
 
     private void fallDown()
