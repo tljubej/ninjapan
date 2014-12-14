@@ -11,9 +11,9 @@ public class PlayerController : MonoBehaviour {
     public float gravity = 20.0f;
 
     private CharacterController controller_;
-
+    // Current move direction
     private Vector3 moveDirection_ = Vector3.zero;
-
+    // Last trigger spawn point
     private Vector3 activeSpawnPoint_ = Vector3.zero;
     
     void Awake()
@@ -44,7 +44,10 @@ public class PlayerController : MonoBehaviour {
 		break;
 	}
     }
-    
+
+    /// <summary>
+    ///   Handles input for basic movement (running and jumping).
+    /// </summary>
     private Vector3 updateMoveDirection()
     {
         float h = Input.GetAxis("Horizontal");
@@ -56,12 +59,18 @@ public class PlayerController : MonoBehaviour {
 	return moveDirection;
     }
 
+    /// <summary>
+    ///   Handles triggering of spike trap and runs death animation.
+    /// </summary>
     private void dieBySpikes()
     {
 	Debug.Log("died by spikes");
 	transform.position = activeSpawnPoint_;
     }
 
+    /// <summary>
+    ///   Sets the new active spawn point.
+    /// </summary>
     private void activateSpawnPoint(Vector3 position)
     {
 	activeSpawnPoint_ = position;
