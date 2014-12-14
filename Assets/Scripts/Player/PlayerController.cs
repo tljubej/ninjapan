@@ -4,7 +4,9 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     // Moving speed
-    public float speed = 20.0f;
+    public float speed = 6.0f;
+    // Jumping speed
+    public float jumpSpeed = 8.0f;
     // Falling speed
     public float gravity = 20.0f;
 
@@ -22,7 +24,6 @@ public class PlayerController : MonoBehaviour {
     {
 	if (controller_.isGrounded) {
 	    moveDirection_ = updateMoveDirection();
-	    moveDirection_.x  *= speed;
 	}
 	moveDirection_.y -= gravity * Time.deltaTime;
         CollisionFlags collisionFlags = controller_.Move(moveDirection_ * Time.deltaTime);
@@ -32,6 +33,10 @@ public class PlayerController : MonoBehaviour {
     {
         float h = Input.GetAxis("Horizontal");
 	Vector3 moveDirection = (Vector3.right * h).normalized;
+	moveDirection.x  *= speed;
+	if (Input.GetButton("Jump")) {
+	    moveDirection.y = jumpSpeed;
+	}
 	return moveDirection;
     }
 }
