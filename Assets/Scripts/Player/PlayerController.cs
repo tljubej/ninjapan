@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour {
 	    case TagManager.spawnPoint:
 		activateSpawnPoint(other.transform.position);
 		break;
+	    case TagManager.scythe:
+		dieByScythe();
+		break;
 	    default:
 		break;
 	}
@@ -68,6 +71,11 @@ public class PlayerController : MonoBehaviour {
 	transform.position = activeSpawnPoint_;
     }
 
+    private void dieByScythe()
+    {
+	Debug.Log("died by scythe");
+    }
+    
     /// <summary>
     ///   Sets the new active spawn point.
     /// </summary>
