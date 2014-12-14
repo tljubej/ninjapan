@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour {
     private CharacterController controller_;
 
     private Vector3 moveDirection_ = Vector3.zero;
+
+    private Vector3 activeSpawnPoint_ = Vector3.zero;
     
     void Awake()
     {
@@ -29,6 +31,20 @@ public class PlayerController : MonoBehaviour {
         CollisionFlags collisionFlags = controller_.Move(moveDirection_ * Time.deltaTime);
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+	switch (other.tag) {
+	    case TagManager.spikes:
+		dieBySpikes();
+		break;
+	    case TagManager.spawnPoint:
+		activateSpawnPoint(other.transform.position);
+		break;
+	    default:
+		break;
+	}
+    }
+    
     private Vector3 updateMoveDirection()
     {
         float h = Input.GetAxis("Horizontal");
@@ -38,5 +54,16 @@ public class PlayerController : MonoBehaviour {
 	    moveDirection.y = jumpSpeed;
 	}
 	return moveDirection;
+    }
+
+    private void dieBySpikes()
+    {
+	Debug.Log("died by spikes");
+	transform.position = activeSpawnPoint_;
+    }
+
+    private void activateSpawnPoint(Vector3 position)
+    {
+	activeSpawnPoint_ = position;
     }
 }
