@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour {
     // Falling speed
     public float gravity = 20.0f;
 
+    public GameObject shurikenPrefab;
+    public Transform shurikenSpawn;
+    public float throwStrength = 10.0f;
+    
     private CharacterController controller_;
     // Current move direction
     private Vector3 moveDirection_ = Vector3.zero;
@@ -24,6 +28,9 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetButtonDown("Fire1")) {
+            throwShuriken();
+        }
 	if (controller_.isGrounded) {
 	    moveDirection_ = updateMoveDirection();
 	}
@@ -82,5 +89,12 @@ public class PlayerController : MonoBehaviour {
     private void activateSpawnPoint(Vector3 position)
     {
 	activeSpawnPoint_ = position;
+    }
+
+    private void throwShuriken()
+    {
+        Object shuriken = Instantiate(shurikenPrefab, shurikenSpawn.position, shurikenSpawn.rotation);
+        Rigidbody rb = (shuriken as GameObject).rigidbody;
+        rb.AddRelativeForce(Vector3.right * throwStrength);
     }
 }

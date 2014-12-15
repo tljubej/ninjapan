@@ -7,11 +7,12 @@ using System.Collections;
 /// </summary>
 public class TagManager : MonoBehaviour {
 
-    // player
     public const string player = "Player";
     public const string spikes = "Spikes";
     public const string spawnPoint = "SpawnPoint";
     public const string fallingFloor = "FallingFloor";
     public const string floor = "Floor";
     public const string scythe = "Scythe";
+    public const string shuriken = "Shuriken";
+    public const string fallingBlock = "FallingBlock";
 }
