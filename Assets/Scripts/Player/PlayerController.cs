@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour {
     public Transform shurikenSpawn;
     public float throwStrength = 10.0f;
     public float climbSpeed = 2.0f;
-    public float climbOffset = 1.0f;
+    public float climbEndOffset = 1.4f;
+    public float climbStartOffset = 1.6f;
 
     private Animator animator_;
     private CharacterController controller_;
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour {
     private Vector3 activeSpawnPoint_ = Vector3.zero;
 
     // Last available grab point
-    private Vector3 grabPoint_ = Vector3.zero;
+    private Transform grabPoint_ = null;
 
     private bool isClimbing_ = false;
     private bool startedClimbing_ = false;
@@ -54,7 +55,7 @@ public class PlayerController : MonoBehaviour {
             }
             animator_.SetBool("Crouch", isCrouching_);
         }
-        if (v > 0.0f && grabPoint_ != Vector3.zero) {
+        if (v > 0.0f && grabPoint_) {
             isClimbing_ = true;
         }
         if (Input.GetButtonDown("Fire1") && !isClimbing_) {
@@ -93,7 +94,7 @@ public class PlayerController : MonoBehaviour {
                 dieByScythe();
                 break;
             case TagManager.grabPoint:
-                grabPoint_ = other.transform.position;
+                grabPoint_ = other.transform;
                 break;
             default:
                 break;
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         if (other.tag == TagManager.grabPoint) {
-            grabPoint_ = Vector3.zero;
+            grabPoint_ = null;
         }
     }
     
@@ -126,14 +127,19 @@ public class PlayerController : MonoBehaviour {
     private IEnumerator climb()
     {
         Debug.Log("Climbing.");
-        Vector3 endPoint = new Vector3(grabPoint_.x, grabPoint_.y + climbOffset, 0.0f);
-        transform.position = new Vector3(endPoint.x, grabPoint_.y - climbOffset, 0.0f);
+        Transform gp = grabPoint_;
+        float gpx = gp.position.x;
+        float gpy = gp.position.y;
+        Vector3 endPoint = new Vector3(gpx, gpy + climbEndOffset, 0.0f);
+        transform.position = new Vector3(endPoint.x, gpy - climbStartOffset, 0.0f);
         animator_.SetTrigger("Climb");
+        transform.rotation = Quaternion.LookRotation(-gp.forward);
         while (isClimbing_ && transform.position.y < endPoint.y) {
             float delta = endPoint.y - transform.position.y;
             transform.position += Vector3.up * Mathf.Min(delta, climbSpeed * Time.deltaTime);
             yield return new WaitForSeconds(0.0f);
         }
+        transform.position += transform.right * 0.2f;
         isClimbing_ = false;
         startedClimbing_ = false;
         isJumping_ = false;
