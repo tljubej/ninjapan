@@ -7,6 +7,8 @@ public class FallingFloor : MonoBehaviour {
     {
         switch (other.tag) {
             case TagManager.player:
+            case TagManager.fallingFloor:
+            case TagManager.fallingBlock:
                 fallDown();
                 break;
             default:
