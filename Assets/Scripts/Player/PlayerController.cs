@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
                 isClimbing_ = false;
             }
         }
-        if (Input.GetButtonDown("Fire1" && !isClimbing_)) {
+        if (Input.GetButtonDown("Fire1") && !isClimbing_) {
             throwShuriken();
         }
         // Climbing overrides other movement.
