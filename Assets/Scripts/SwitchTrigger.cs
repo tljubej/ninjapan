@@ -33,7 +33,7 @@ public class SwitchTrigger : MonoBehaviour {
     {
         transform.Translate(Vector3.down * 0.25f, Space.World);
         BoxCollider box = collider as BoxCollider;
-        box.size  = box.size + Vector3.right;
+        box.size  = box.size + Vector3.right + 2.0f * Vector3.up;
         (triggerable as ITriggerable).Trigger();
     }
 
@@ -41,7 +41,7 @@ public class SwitchTrigger : MonoBehaviour {
     {
         transform.Translate(Vector3.up * 0.25f, Space.World);
         BoxCollider box = collider as BoxCollider;
-        box.size  = box.size - Vector3.right;
+        box.size  = box.size - Vector3.right - 2.0f * Vector3.up;
         (triggerable as ITriggerable).Untrigger();
     }
 }
