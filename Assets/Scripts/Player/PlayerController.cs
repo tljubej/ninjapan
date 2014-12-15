@@ -13,12 +13,20 @@ public class PlayerController : MonoBehaviour {
     public GameObject shurikenPrefab;
     public Transform shurikenSpawn;
     public float throwStrength = 10.0f;
+    public float climbSpeed = 2.0f;
+    public float climbOffset = 1.0f;
     
     private CharacterController controller_;
     // Current move direction
     private Vector3 moveDirection_ = Vector3.zero;
     // Last trigger spawn point
     private Vector3 activeSpawnPoint_ = Vector3.zero;
+
+    // Last available grab point
+    private Vector3 grabPoint_ = Vector3.zero;
+
+    private bool isClimbing_ = false;
+    private bool startedClimbing_ = false;
     
     void Awake()
     {
@@ -28,14 +36,31 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1")) {
+        if (controller_.isGrounded) {
+            moveDirection_ = updateMoveDirection();
+        } else {
+            float v = Input.GetAxis("Vertical");
+            if (v > 0.0f && grabPoint_ != Vector3.zero) {
+                isClimbing_ = true;
+            } else if (isClimbing_ && v <= 0.0f) {
+                isClimbing_ = false;
+            }
+        }
+        if (Input.GetButtonDown("Fire1" && !isClimbing_)) {
             throwShuriken();
         }
-	if (controller_.isGrounded) {
-	    moveDirection_ = updateMoveDirection();
-	}
-	moveDirection_.y -= gravity * Time.deltaTime;
-        CollisionFlags collisionFlags = controller_.Move(moveDirection_ * Time.deltaTime);
+        // Climbing overrides other movement.
+        if (isClimbing_) {
+            moveDirection_ = Vector3.zero;
+            if (!startedClimbing_) {
+                startedClimbing_ = true;
+                StartCoroutine(climb());
+            }
+        } else {
+            moveDirection_.y -= gravity * Time.deltaTime;
+            CollisionFlags collisionFlags =
+                controller_.Move(moveDirection_ * Time.deltaTime);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -50,11 +75,21 @@ public class PlayerController : MonoBehaviour {
             case TagManager.scythe:
                 dieByScythe();
                 break;
+            case TagManager.grabPoint:
+                grabPoint_ = other.transform.position;
+                break;
             default:
                 break;
         }
     }
 
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == TagManager.grabPoint) {
+            grabPoint_ = Vector3.zero;
+        }
+    }
+    
     /// <summary>
     ///   Handles input for basic movement (running and jumping).
     /// </summary>
@@ -69,6 +104,21 @@ public class PlayerController : MonoBehaviour {
         return moveDirection;
     }
 
+    private IEnumerator climb()
+    {
+        Debug.Log("Climbing.");
+        Vector3 endPoint = new Vector3(grabPoint_.x, grabPoint_.y + climbOffset, 0.0f);
+        transform.position = new Vector3(endPoint.x, transform.position.y, 0.0f);
+        while (isClimbing_ && transform.position.y < endPoint.y) {
+            float delta = endPoint.y - transform.position.y;
+            transform.position += Vector3.up * Mathf.Min(delta, climbSpeed * Time.deltaTime);
+            yield return new WaitForSeconds(0.0f);
+        }
+        isClimbing_ = false;
+        startedClimbing_ = false;
+        Debug.Log("DoneClimbing.");
+    }
+    
     /// <summary>
     ///   Handles triggering of spike trap and runs death animation.
     /// </summary>

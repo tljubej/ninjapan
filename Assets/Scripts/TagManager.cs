@@ -15,4 +15,5 @@ public class TagManager : MonoBehaviour {
     public const string scythe = "Scythe";
     public const string shuriken = "Shuriken";
     public const string fallingBlock = "FallingBlock";
+    public const string grabPoint = "GrabPoint";
 }

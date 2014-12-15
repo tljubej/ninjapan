@@ -9,6 +9,8 @@ public class SwitchTrigger : MonoBehaviour {
     {
 	switch (other.tag) {
 	    case TagManager.player:
+            case TagManager.fallingBlock:
+            case TagManager.fallingFloor:
 		trigger();
 		break;
 	    default:
