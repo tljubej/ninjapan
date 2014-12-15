@@ -38,13 +38,12 @@ public class PlayerController : MonoBehaviour {
     {
         if (controller_.isGrounded) {
             moveDirection_ = updateMoveDirection();
-        } else {
-            float v = Input.GetAxis("Vertical");
-            if (v > 0.0f && grabPoint_ != Vector3.zero) {
-                isClimbing_ = true;
-            } else if (isClimbing_ && v <= 0.0f) {
-                isClimbing_ = false;
-            }
+        }
+        float v = Input.GetAxis("Vertical");
+        if (v > 0.0f && grabPoint_ != Vector3.zero) {
+            isClimbing_ = true;
+        } else if (isClimbing_ && v <= 0.0f) {
+            isClimbing_ = false;
         }
         if (Input.GetButtonDown("Fire1") && !isClimbing_) {
             throwShuriken();
