@@ -4,7 +4,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     // Moving speed
-    public float speed = 6.0f;
+    public float runSpeed = 6.0f;
+    public float crouchSpeed = 2.0f;
     // Jumping speed
     public float jumpSpeed = 8.0f;
     // Falling speed
@@ -49,9 +50,13 @@ public class PlayerController : MonoBehaviour {
             }
             moveDirection_ = updateMoveDirection();
             if (v < 0.0f) {
+                if (!isCrouching_) {
+                    crouch();
+                }
                 isCrouching_ = true;
             } else if (isCrouching_){
                 isCrouching_ = false;
+                uncrouch();
             }
             animator_.SetBool("Crouch", isCrouching_);
         }
@@ -115,6 +120,7 @@ public class PlayerController : MonoBehaviour {
     {
         float h = Input.GetAxis("Horizontal");
         Vector3 moveDirection = (Vector3.right * h).normalized;
+        float speed = isCrouching_ ? crouchSpeed : runSpeed;
         moveDirection.x  *= speed;
         if (Input.GetButton("Jump")) {
             moveDirection.y = jumpSpeed;
@@ -146,6 +152,19 @@ public class PlayerController : MonoBehaviour {
         animator_.ResetTrigger("Jump");
         animator_.ResetTrigger("Landed");
         Debug.Log("DoneClimbing.");
+    }
+
+    private void crouch()
+    {
+        CharacterController capsule = collider as CharacterController;
+        capsule.height -= 0.6f;
+    }
+
+    private void uncrouch()
+    {
+        transform.position += Vector3.up * 0.6f;
+        CharacterController capsule = collider as CharacterController;
+        capsule.height += 0.6f;
     }
     
     /// <summary>
