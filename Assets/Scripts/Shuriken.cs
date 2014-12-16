@@ -10,6 +10,7 @@ public class Shuriken : MonoBehaviour {
     {
         if (rigidbody.IsSleeping()) {
             Destroy(gameObject, destroyAfter);
+            rigidbody.isKinematic = true;
         }
     }
 }
