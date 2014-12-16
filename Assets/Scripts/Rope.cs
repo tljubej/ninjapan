@@ -29,6 +29,7 @@ public class Rope : MonoBehaviour, ITriggerable {
             isCut_ = true;
             fallingBlock.isKinematic = false;
             fallingBlock.WakeUp();
+            Destroy(gameObject);
         }
     }
 }
