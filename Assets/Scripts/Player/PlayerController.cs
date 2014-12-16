@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour {
     private bool startedClimbing_ = false;
     private bool isJumping_ = false;
     private bool isCrouching_ = false;
+    private bool isDead_ = false;
     private float currentShurikenTime_ = 0.0f;
     
     void Awake()
@@ -44,6 +45,31 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update()
+    {
+        if (!isDead_) {
+            handleInputs();
+        }
+        // Climbing overrides other movement.
+        if (isClimbing_) {
+            moveDirection_ = Vector3.zero;
+            if (!startedClimbing_) {
+                startedClimbing_ = true;
+                StartCoroutine(climb());
+            }
+        } else {
+            moveDirection_.y -= gravity * Time.deltaTime;
+            CollisionFlags collisionFlags =
+                controller_.Move(moveDirection_ * Time.deltaTime);
+            if (moveDirection_.x > 0.0f) {
+                transform.rotation = Quaternion.LookRotation(Vector3.forward);
+            } else if (moveDirection_.x < 0.0f) {
+                transform.rotation = Quaternion.LookRotation(-Vector3.forward);
+            }
+        }
+        animator_.SetFloat("Speed", Mathf.Abs(moveDirection_.x));
+    }
+
+    void handleInputs()
     {
         float v = Input.GetAxis("Vertical");
         if (controller_.isGrounded) {
@@ -73,26 +99,8 @@ public class PlayerController : MonoBehaviour {
             animator_.SetTrigger("Throw");
             Invoke("throwShuriken", shurikenDelay);
         }
-        // Climbing overrides other movement.
-        if (isClimbing_) {
-            moveDirection_ = Vector3.zero;
-            if (!startedClimbing_) {
-                startedClimbing_ = true;
-                StartCoroutine(climb());
-            }
-        } else {
-            moveDirection_.y -= gravity * Time.deltaTime;
-            CollisionFlags collisionFlags =
-                controller_.Move(moveDirection_ * Time.deltaTime);
-            if (moveDirection_.x > 0.0f) {
-                transform.rotation = Quaternion.LookRotation(Vector3.forward);
-            } else if (moveDirection_.x < 0.0f) {
-                transform.rotation = Quaternion.LookRotation(-Vector3.forward);
-            }
-        }
-        animator_.SetFloat("Speed", Mathf.Abs(moveDirection_.x));
     }
-
+    
     void OnTriggerEnter(Collider other)
     {
         switch (other.tag) {
@@ -179,20 +187,31 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private void dieBySpikes()
     {
+        if (isDead_) {
+            return;
+        }
         Debug.Log("died by spikes");
-        transform.position = activeSpawnPoint_;
-        Application.LoadLevel(Application.loadedLevel);
-        // animator_.Play("Death");
-        // Invoke("LowerPosition", 0.7f);
+        animator_.Play("Death");
+        Invoke("LowerPosition", 0.7f);
+        Invoke("restartLevel", 4.0f);
     }
 
     private void dieByScythe()
     {
+        if (isDead_) {
+            return;
+        }
         Debug.Log("died by scythe");
-        // animator_.Play("Death");
-        // Invoke("LowerPosition", 0.7f);
+        animator_.Play("Death");
+        Invoke("LowerPosition", 0.7f);
+        Invoke("restartLevel", 4.0f);
     }
 
+    private void restartLevel()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
+    
     void LowerPosition()
     {
         CharacterController capsule = collider as CharacterController;
