@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject shurikenPrefab;
     public Transform shurikenSpawn;
+    public float shurikenDelay = 0.2f;
+    public float shurikenCooldown = 1.0f;
     public float throwStrength = 10.0f;
     public float climbSpeed = 2.0f;
     public float climbEndOffset = 1.4f;
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour {
     private bool startedClimbing_ = false;
     private bool isJumping_ = false;
     private bool isCrouching_ = false;
+    private float currentShurikenTime_ = 0.0f;
     
     void Awake()
     {
@@ -63,8 +66,12 @@ public class PlayerController : MonoBehaviour {
         if (v > 0.0f && grabPoint_) {
             isClimbing_ = true;
         }
-        if (Input.GetButtonDown("Fire1") && !isClimbing_) {
-            throwShuriken();
+        currentShurikenTime_ = Mathf.Max(0.0f,currentShurikenTime_ - Time.deltaTime);
+        if (Input.GetButtonDown("Fire1") && !isClimbing_ && !isCrouching_
+            && controller_.isGrounded && currentShurikenTime_ <= 0.0f) {
+            currentShurikenTime_ = shurikenCooldown;
+            animator_.SetTrigger("Throw");
+            Invoke("throwShuriken", shurikenDelay);
         }
         // Climbing overrides other movement.
         if (isClimbing_) {
