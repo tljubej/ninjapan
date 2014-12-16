@@ -15,7 +15,7 @@ public class ScytheMovement : MonoBehaviour {
 	Vector3 moveDirection = updateMoveDirection();
 	transform.Translate(moveDirection * Time.deltaTime, Space.World);
     }
-
+    
     private Vector3 updateMoveDirection()
     {
 	Vector3 direction = Vector3.zero;

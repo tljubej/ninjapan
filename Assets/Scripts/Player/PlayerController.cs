@@ -187,24 +187,26 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private void dieBySpikes()
     {
+        Debug.Log("died by spikes");
         if (isDead_) {
             return;
         }
-        Debug.Log("died by spikes");
         animator_.Play("Death");
         Invoke("LowerPosition", 0.7f);
         Invoke("restartLevel", 4.0f);
+        isDead_ = true;
     }
 
     private void dieByScythe()
     {
+        Debug.Log("died by scythe");
         if (isDead_) {
             return;
         }
-        Debug.Log("died by scythe");
         animator_.Play("Death");
         Invoke("LowerPosition", 0.7f);
         Invoke("restartLevel", 4.0f);
+        isDead_ = true;
     }
 
     private void restartLevel()
