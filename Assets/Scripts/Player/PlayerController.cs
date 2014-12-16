@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour {
     {
         if (!isDead_) {
             handleInputs();
+        } else {
+            moveDirection_.x = 0.0f;
         }
         // Climbing overrides other movement.
         if (isClimbing_) {
