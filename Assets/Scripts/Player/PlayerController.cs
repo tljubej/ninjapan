@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("died by spikes");
         transform.position = activeSpawnPoint_;
+        Application.LoadLevel(Application.loadedLevel);
         // animator_.Play("Death");
         // Invoke("LowerPosition", 0.7f);
     }
