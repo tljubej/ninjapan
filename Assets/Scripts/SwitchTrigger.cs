@@ -4,6 +4,8 @@ using System.Collections;
 public class SwitchTrigger : MonoBehaviour {
 
     public MonoBehaviour triggerable;
+
+    private bool isTriggered_ = false;
     
     void OnTriggerEnter(Collider other)
     {
@@ -11,7 +13,10 @@ public class SwitchTrigger : MonoBehaviour {
 	    case TagManager.player:
             case TagManager.fallingBlock:
             case TagManager.fallingFloor:
-		trigger();
+                if (!isTriggered_) {
+                    trigger();
+                    isTriggered_ = true;
+                }
 		break;
 	    default:
 		break;
@@ -23,6 +28,7 @@ public class SwitchTrigger : MonoBehaviour {
 	switch (other.tag) {
 	    case TagManager.player:
 		untrigger();
+                isTriggered_ = false;
 		break;
 	    default:
 		break;
