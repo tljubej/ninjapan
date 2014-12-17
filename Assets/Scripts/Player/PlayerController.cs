@@ -193,10 +193,7 @@ public class PlayerController : MonoBehaviour {
         if (isDead_) {
             return;
         }
-        animator_.Play("Death");
-        Invoke("LowerPosition", 0.7f);
-        Invoke("restartLevel", 4.0f);
-        isDead_ = true;
+        playDeathAnimation();
     }
 
     private void dieByScythe()
@@ -205,12 +202,17 @@ public class PlayerController : MonoBehaviour {
         if (isDead_) {
             return;
         }
+        playDeathAnimation();
+    }
+
+    private void playDeathAnimation()
+    {
         animator_.Play("Death");
         Invoke("LowerPosition", 0.7f);
         Invoke("restartLevel", 4.0f);
         isDead_ = true;
     }
-
+    
     private void restartLevel()
     {
         Application.LoadLevel(Application.loadedLevel);
