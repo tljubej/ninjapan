@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour {
         transform.position = new Vector3(endPoint.x, gpy - climbStartOffset, 0.0f);
         animator_.SetTrigger("Climb");
         transform.rotation = Quaternion.LookRotation(-gp.forward);
-        while (isClimbing_ && transform.position.y < endPoint.y) {
+        while (!isDead_ && isClimbing_ && transform.position.y < endPoint.y) {
             float delta = endPoint.y - transform.position.y;
             transform.position += Vector3.up * Mathf.Min(delta, climbSpeed * Time.deltaTime);
             yield return new WaitForSeconds(0.0f);
