@@ -7,7 +7,7 @@ public class SwitchTrigger : MonoBehaviour {
 
     private bool isTriggered_ = false;
     
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
 	switch (other.tag) {
 	    case TagManager.player:
