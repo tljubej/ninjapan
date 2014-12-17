@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour {
                 activateSpawnPoint(other.transform.position);
                 break;
             case TagManager.scythe:
+            case TagManager.fallingBlock:
                 dieByScythe();
                 break;
             case TagManager.grabPoint:
