@@ -16,4 +16,5 @@ public class TagManager : MonoBehaviour {
     public const string shuriken = "Shuriken";
     public const string fallingBlock = "FallingBlock";
     public const string grabPoint = "GrabPoint";
+    public const string endTrigger = "EndTrigger";
 }
