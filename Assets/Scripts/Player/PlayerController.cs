@@ -20,6 +20,16 @@ public class PlayerController : MonoBehaviour {
     public float climbEndOffset = 1.4f;
     public float climbStartOffset = 1.6f;
 
+    public AudioClip climbSound;
+    public AudioClip walkSound;
+    public float walkLowVol = 0.5f;
+    public float walkHighVol = 1.0f;
+    public AudioClip deathSound;
+    public float runSoundInterval = 0.3f;
+    public float crouchWalkSoundInterval = 1.0f;
+    public AudioClip jumpingSound;
+    public AudioClip landingSound;
+    
     private Animator animator_;
     private CharacterController controller_;
     // Current move direction
@@ -36,11 +46,15 @@ public class PlayerController : MonoBehaviour {
     private bool isCrouching_ = false;
     private bool isDead_ = false;
     private float currentShurikenTime_ = 0.0f;
+
+    private AudioSource audioSource_ = null;
+    private float walkSoundTimer_ = 0.0f;
     
     void Awake()
     {
         controller_ = GetComponent<CharacterController>();
         animator_ = GetComponentInChildren<Animator>();
+        audioSource_ = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -78,6 +92,8 @@ public class PlayerController : MonoBehaviour {
             if (isJumping_) {
                 isJumping_ = false;
                 animator_.SetTrigger("Landed");
+                audioSource_.pitch = 1.0f;
+                audioSource_.PlayOneShot(landingSound, 0.4f);
             }
             moveDirection_ = updateMoveDirection();
             if (v < 0.0f) {
@@ -90,6 +106,9 @@ public class PlayerController : MonoBehaviour {
                 uncrouch();
             }
             animator_.SetBool("Crouch", isCrouching_);
+            if (moveDirection_.x != 0.0f) {
+                playWalkSound();
+            }
         }
         if (v > 0.0f && grabPoint_) {
             isClimbing_ = true;
@@ -144,12 +163,16 @@ public class PlayerController : MonoBehaviour {
             moveDirection.y = jumpSpeed;
             animator_.SetTrigger("Jump");
             isJumping_ = true;
+            audioSource_.pitch = 1.0f;
+            audioSource_.PlayOneShot(jumpingSound, 0.25f);
         }
         return moveDirection;
     }
 
     private IEnumerator climb()
     {
+        audioSource_.pitch = 1.0f;
+        audioSource_.PlayOneShot(climbSound);
         Debug.Log("Climbing.");
         Transform gp = grabPoint_;
         float gpx = gp.position.x;
@@ -206,8 +229,22 @@ public class PlayerController : MonoBehaviour {
         playDeathAnimation();
     }
 
+    private void playWalkSound()
+    {
+        walkSoundTimer_ += Time.deltaTime;
+        float interval = isCrouching_ ? crouchWalkSoundInterval : runSoundInterval;
+        if (walkSoundTimer_ > interval) {
+            audioSource_.pitch = Random.Range(1.0f, 2.0f);
+            float vol = Random.Range(walkLowVol, walkHighVol);
+            audioSource_.PlayOneShot(walkSound, vol);
+            walkSoundTimer_ = 0.0f;
+        }
+    }
+    
     private void playDeathAnimation()
     {
+        audioSource_.pitch = 1.0f;
+        audioSource_.PlayOneShot(deathSound);
         animator_.Play("Death");
         Invoke("LowerPosition", 0.7f);
         Invoke("restartLevel", 4.0f);
