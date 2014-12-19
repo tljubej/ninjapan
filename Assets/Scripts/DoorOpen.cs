@@ -12,11 +12,24 @@ public class DoorOpen : MonoBehaviour, ITriggerable {
     private Vector3 startPos_;
     private Vector3 endPos_;
 
+    public float pitchLow = 0.75f;
+    public float pitchHigh = 1.5f;
+    public float volLow = 0.75f;
+    public float volHigh = 1.0f;
+    public AudioClip openingSound;
+    public AudioClip openedSound;
+    public AudioClip closedSound;
+
+    private AudioSource source_ = null;
+    private bool isClosed_ = true;
+    private bool isOpened_ = false;
+
     void Start()
     {
         startPos_ = transform.position;
         endPos_ = startPos_;
         endPos_.y += openOffset;
+        source_ = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -32,22 +45,47 @@ public class DoorOpen : MonoBehaviour, ITriggerable {
 	if (isOpening_) {
 	    if (transform.position.y < endPos_.y) {
                 direction.y = openSpeed;
+            } else if (!isOpened_) {
+                isOpened_ = true;
+                source_.Stop();
+                playSound(openedSound);
             }
 	} else {
             if (transform.position.y > startPos_.y) {
                 direction.y = -closeSpeed;
+            } else if (!isClosed_) {
+                isClosed_ = true;
+                source_.Stop();
+                playSound(closedSound);
             }
         }
 	return direction;
     }
+
+    private void playSound(AudioClip sound)
+    {
+        source_.pitch = Random.Range(pitchLow, pitchHigh);
+        source_.PlayOneShot(sound, 1.0f);
+    }
     
     void ITriggerable.Trigger()
     {
-        isOpening_ = true;
+        if (!isOpening_) {
+            isOpening_ = true;
+            isClosed_ = false;
+            source_.Stop();
+            playSound(openingSound);
+        }
     }
 
     void ITriggerable.Untrigger()
     {
-        isOpening_ = false;
+        if (isOpening_) {
+            source_.pitch = Random.Range(pitchLow, pitchHigh);
+            source_.volume = Random.Range(volLow, volHigh);
+            source_.Play();
+            isOpening_ = false;
+            isOpened_ = false;
+        }
     }
 }
