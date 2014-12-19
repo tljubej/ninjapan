@@ -6,6 +6,16 @@ public class SwitchTrigger : MonoBehaviour {
     public MonoBehaviour triggerable;
 
     private bool isTriggered_ = false;
+    private AudioSource source_ = null;
+    public float pitchLow = 0.75f;
+    public float pitchHigh = 1.25f;
+    public float volLow = 0.75f;
+    public float volHigh = 1.0f;
+
+    void Start()
+    {
+        source_ = GetComponent<AudioSource>();
+    }
     
     void OnTriggerStay(Collider other)
     {
@@ -27,8 +37,10 @@ public class SwitchTrigger : MonoBehaviour {
     {
 	switch (other.tag) {
 	    case TagManager.player:
-		untrigger();
-                isTriggered_ = false;
+                if (isTriggered_) {
+                    untrigger();
+                    isTriggered_ = false;
+                }
 		break;
 	    default:
 		break;
@@ -41,6 +53,9 @@ public class SwitchTrigger : MonoBehaviour {
         BoxCollider box = collider as BoxCollider;
         box.size  = box.size + Vector3.right + 2.0f * Vector3.up;
         (triggerable as ITriggerable).Trigger();
+        source_.pitch = Random.Range(pitchLow, pitchHigh);
+        source_.volume = Random.Range(volLow, volHigh);
+        source_.Play();
     }
 
     private void untrigger()

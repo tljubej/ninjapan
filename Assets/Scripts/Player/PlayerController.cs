@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     public float crouchWalkSoundInterval = 1.0f;
     public AudioClip jumpingSound;
     public AudioClip landingSound;
+    public AudioClip throwingSound;
     
     private Animator animator_;
     private CharacterController controller_;
@@ -284,5 +285,7 @@ public class PlayerController : MonoBehaviour {
         Object shuriken = Instantiate(shurikenPrefab, shurikenSpawn.position, shurikenSpawn.rotation);
         Rigidbody rb = (shuriken as GameObject).rigidbody;
         rb.AddRelativeForce(Vector3.right * throwStrength);
+        audioSource_.pitch = 1.0f;
+        audioSource_.PlayOneShot(throwingSound, 1.0f);
     }
 }

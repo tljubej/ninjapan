@@ -11,6 +11,13 @@ public class ScytheMovement : MonoBehaviour {
     public float speed = 5.0f;
 
     private bool moveLeft_ = true;
+    private AudioSource source_ = null;
+    public AudioClip stopSound = null;
+
+    void Start()
+    {
+        source_ = GetComponent<AudioSource>();
+    }
     
     void Update()
     {
@@ -21,7 +28,11 @@ public class ScytheMovement : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == TagManager.fallingBlock) {
-            isMoving = false;
+            source_.Stop();
+            if (isMoving) {
+                source_.PlayOneShot(stopSound, 1.0f);
+                isMoving = false;
+            }
         }
     }
     
