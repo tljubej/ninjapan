@@ -4,10 +4,12 @@ using System.Collections;
 public class PauseController : MonoBehaviour {
 
 	public void MainMenu(){
+		Time.timeScale = 1.0f;
 		Application.LoadLevel("MainMenu");
 	}
 
 	public void RestartGame(){
+		Time.timeScale = 1.0f;
 		Application.LoadLevel("Level1");
 	}
 
