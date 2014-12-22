@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PauseController : MonoBehaviour {
+public class NavigationController : MonoBehaviour {
 
     public void MainMenu(){
         Time.timeScale = 1.0f;

@@ -13,5 +13,7 @@ public class EndTrigger : MonoBehaviour {
     private void endLevel()
     {
         Debug.Log("Ending level.");
+		Time.timeScale = 0f;
+		Application.LoadLevelAdditive("EndGame");
     }
 }

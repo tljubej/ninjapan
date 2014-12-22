@@ -9,11 +9,11 @@ public class PauseItems : MonoBehaviour {
     public Transform quitButton;
     public Transform pauseBackground;
     public Transform title;
+	public GameObject pauseCamera;
 	
     // Update is called once per frame
-    void Update () {
+    void Start () {
         GameObject mainCamera = GameObject.FindWithTag(TagManager.mainCamera);
-        GameObject pauseCamera = GameObject.Find("PauseCamera");
         pauseCamera.transform.localPosition = mainCamera.transform.localPosition;
         pauseCamera.transform.localRotation = mainCamera.transform.localRotation;
         pauseCamera.transform.localScale = mainCamera.transform.localScale;
@@ -26,27 +26,27 @@ public class PauseItems : MonoBehaviour {
 
         //title
         float titleY = Screen.height / 2f - Screen.height / 5f;
-        title.localScale = new Vector3(scale * 30f, scale * 30f, 1f);
+        title.localScale = new Vector3(scale * 25f, scale * 25f, 1f);
         title.localPosition = new Vector3(0f, titleY, -7f * scale);
 
         //resume button
         float resumeY = 0.0f;
         resumeButton.localPosition = new Vector3(0f, resumeY, 0f);
-        resumeButton.localScale = new Vector3(scale * 1.5f, scale * 1.5f, 1f);
+        resumeButton.localScale = new Vector3(scale * 1.25f, scale * 1.25f, 1f);
 		
         //restart button
         float restartY = 0f - Screen.height / 7f;
         restartButton.localPosition = new Vector3(0f, restartY, 0f);
-        restartButton.localScale = new Vector3(scale * 1.5f, scale * 1.5f, 1f);
+        restartButton.localScale = new Vector3(scale * 1.25f, scale * 1.25f, 1f);
 		
         //main menu button
         float mainMenuY = -Screen.height / 7f * 2f;
         mainMenuButton.localPosition = new Vector3(0f, mainMenuY, 0f);
-        mainMenuButton.localScale = new Vector3(scale * 1.5f, scale * 1.5f, 1f);
+        mainMenuButton.localScale = new Vector3(scale * 1.25f, scale * 1.25f, 1f);
 
         //quit button
         float quitY = -Screen.height / 7f * 3f;
         quitButton.localPosition = new Vector3(0f, quitY, 0f);
-        quitButton.localScale = new Vector3(scale * 1.5f , scale * 1.5f, 1f);
+        quitButton.localScale = new Vector3(scale * 1.25f , scale * 1.25f, 1f);
     }
 }
