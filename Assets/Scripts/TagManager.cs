@@ -17,4 +17,6 @@ public class TagManager : MonoBehaviour {
     public const string fallingBlock = "FallingBlock";
     public const string grabPoint = "GrabPoint";
     public const string endTrigger = "EndTrigger";
+    public const string mainCamera = "MainCamera";
+    public const string pauseMenu = "PauseMenu";
 }

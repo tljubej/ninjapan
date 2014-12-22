@@ -3,23 +3,23 @@ using System.Collections;
 
 public class PauseController : MonoBehaviour {
 
-	public void MainMenu(){
-		Time.timeScale = 1.0f;
-		Application.LoadLevel("MainMenu");
-	}
+    public void MainMenu(){
+        Time.timeScale = 1.0f;
+        Application.LoadLevel("MainMenu");
+    }
 
-	public void RestartGame(){
-		Time.timeScale = 1.0f;
-		Application.LoadLevel("Level1");
-	}
+    public void RestartGame(){
+        Time.timeScale = 1.0f;
+        Application.LoadLevel(Application.loadedLevel);
+    }
 
-	public void QuitGame(){
-		Application.Quit();
-	}
+    public void QuitGame(){
+        Application.Quit();
+    }
 
-	public void ResumeGame(){
-		GameObject pause  = GameObject.FindGameObjectWithTag ("Pause");
-		Destroy(pause);
-		Time.timeScale = 1.0f;
-	}
+    public void ResumeGame(){
+        GameObject pause = GameObject.FindWithTag(TagManager.pauseMenu);
+        Destroy(pause);
+        Time.timeScale = 1.0f;
+    }
 }
